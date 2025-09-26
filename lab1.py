@@ -99,24 +99,37 @@ def depth_first_search(stack):
     
     return flip_sequence
     # ---------------------------- #
-    
 
 if __name__ == "__main__":
-    # Test case from instructions
+    # --- BFS Test ---
     test = TextbookStack(initial_order=[3, 2, 1, 0], initial_orientations=[0, 0, 0, 0])
-
-    # --- BFS ---
     output_sequence = breadth_first_search(test)
-    print("BFS output sequence:", output_sequence)  # Should give you [4]
+    print("BFS output sequence:", output_sequence)  # Should give [4]
 
     new_stack = apply_sequence(test, output_sequence)
     stack_ordered = new_stack.check_ordered()
-    print("BFS final stack ordered?", stack_ordered)  # Should give you True
+    print("BFS stack ordered?:", stack_ordered)  # Should give True
 
-    # --- DFS ---
-    dfs_sequence = depth_first_search(test)
-    print("DFS output sequence:", dfs_sequence)
+    # --- DFS Test ---
+    test = TextbookStack(initial_order=[3, 2, 1, 0], initial_orientations=[0, 0, 0, 0])
+    output_sequence = depth_first_search(test)
+    print("DFS output sequence:", output_sequence)
 
-    dfs_new_stack = apply_sequence(test, dfs_sequence)
-    dfs_ordered = dfs_new_stack.check_ordered()
-    print("DFS final stack ordered?", dfs_ordered)  # Should give you True
+    new_stack = apply_sequence(test, output_sequence)
+    stack_ordered = new_stack.check_ordered()
+    print("DFS stack ordered?:", stack_ordered)  # Should give True
+
+    # Expected results
+    dfs_expected_sequence_1 = [4]
+    dfs_expected_sequence_2 = [
+        1, 2, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 2, 1, 3,
+        1, 2, 1, 2, 1, 2, 1, 3, 1, 2, 1, 2, 1, 2, 1, 4,
+        # (continues … long sequence)
+    ]
+
+    if output_sequence == dfs_expected_sequence_1:
+        print("DFS produced expected sequence 1")
+    elif output_sequence == dfs_expected_sequence_2:
+        print("DFS produced expected sequence 2")
+    else:
+        print("DFS produced a different sequence (still valid if it orders stack!)")
