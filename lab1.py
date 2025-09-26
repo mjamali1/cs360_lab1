@@ -49,6 +49,25 @@ def breadth_first_search(stack):
     flip_sequence = []
 
     # --- v ADD YOUR CODE HERE v --- #
+    queue = [(stack.copy(), [])]
+    visited = []
+
+    while len(queue) > 0:
+        current_stack, seq = queue.pop(0)  # pop(0) makes this a queue
+
+        if current_stack.check_ordered():
+            flip_sequence = seq
+            break
+
+        key = (list(current_stack.order), list(current_stack.orientations))
+        if key in visited:
+            continue
+        visited.append(key)
+
+        for pos in range(1, current_stack.num_books + 1):
+            new_stack = current_stack.copy()
+            new_stack.flip_stack(pos)
+            queue.append((new_stack, seq + [pos]))
 
     return flip_sequence
     # ---------------------------- #
@@ -58,7 +77,46 @@ def depth_first_search(stack):
     flip_sequence = []
 
     # --- v ADD YOUR CODE HERE v --- #
+    stack_list = [(stack.copy(), [])]
+    visited = []
 
+    while len(stack_list) > 0:
+        current_stack, seq = stack_list.pop()
 
+        if current_stack.check_ordered():
+            flip_sequence = seq
+            break
+
+        key = (list(current_stack.order), list(current_stack.orientations))
+        if key in visited:
+            continue
+        visited.append(key)
+
+        for pos in range(1, current_stack.num_books + 1):
+            new_stack = current_stack.copy()
+            new_stack.flip_stack(pos)
+            stack_list.append((new_stack, seq + [pos]))
+    
     return flip_sequence
     # ---------------------------- #
+    
+
+if __name__ == "__main__":
+    # Test case from instructions
+    test = TextbookStack(initial_order=[3, 2, 1, 0], initial_orientations=[0, 0, 0, 0])
+
+    # --- BFS ---
+    output_sequence = breadth_first_search(test)
+    print("BFS output sequence:", output_sequence)  # Should give you [4]
+
+    new_stack = apply_sequence(test, output_sequence)
+    stack_ordered = new_stack.check_ordered()
+    print("BFS final stack ordered?", stack_ordered)  # Should give you True
+
+    # --- DFS ---
+    dfs_sequence = depth_first_search(test)
+    print("DFS output sequence:", dfs_sequence)
+
+    dfs_new_stack = apply_sequence(test, dfs_sequence)
+    dfs_ordered = dfs_new_stack.check_ordered()
+    print("DFS final stack ordered?", dfs_ordered)  # Should give you True
